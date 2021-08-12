@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
 import {Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle} from 'reactstrap';
-
+var dateFormat = require("dateformat");
+var now = new Date();
 class Menu extends Component {
-
+    
     constructor(props) {
         super(props);
 
         this.state = {
             selectedDish: null
           }   
+          console.log('Menu component constructor is invoked');
+        }
+        
+        componentDidMount() {
+            console.log('Menu Component componentDidMount is invoked')
         }
 
         onDishSelect(dish) {
@@ -18,16 +24,27 @@ class Menu extends Component {
         renderDish(dish) {
             if(dish != null) {
                 return(
-                    <Card>
-                        <CardImg width='100%' src={dish.image} alt={dish.name} />
-                        <CardImgOverlay>
-                            <CardTitle><h1>{dish.name}</h1></CardTitle>
-                        </CardImgOverlay>
-                        <CardBody>
-                            <CardTitle>{dish.name}</CardTitle>
-                            <CardText>{dish.description}</CardText>
-                        </CardBody>
-                    </Card>
+                    <div className='row'>
+                        <div className='col-12 col-md-5 m-1'>
+                            <Card>
+                                <CardImg width='100%' src={dish.image} alt={dish.name} />
+                                <CardBody>
+                                    <CardTitle>{dish.name}</CardTitle>
+                                    <CardText>{dish.description}</CardText>
+                                </CardBody>
+                            </Card>
+                        </div>
+                        <div className='col-12 col-md-5 m-1'>
+                            <Card>
+                                <CardImg width='100%'/>
+                                <CardBody>
+                                    <CardTitle><h5>Comments</h5></CardTitle>
+                                    {dish.comments.map(commentObj => 
+                                    { return <CardText>{commentObj.comment} <br/> {'--'}{commentObj.author} {', '} {dateFormat(commentObj.date, 'mmm, dd, yyyy')} </CardText> })}
+                                </CardBody>
+                            </Card>
+                        </div>
+                    </div>
                 );
             }
             else {
@@ -52,6 +69,8 @@ class Menu extends Component {
                 </div>
             );
         });
+
+        console.log('Menu component render is invoked');
 
         return ( 
             <div className='container'>
